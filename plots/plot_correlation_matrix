@@ -1,0 +1,52 @@
+import os
+from os.path import join
+import matplotlib.pyplot as plt
+import numpy as np
+from nilearn import plotting
+
+path = '/home/jrudascas/Desktop/Tesis/data/datasets/test-retest'
+
+for dataset in os.listdir(path):
+    output_path = join(path, dataset, 'output/datasink/preprocessing')
+    for subject in os.listdir(output_path):
+        subject_output_path = join(output_path, subject)
+        print(subject_output_path)
+        for parcellation in os.listdir(subject_output_path):
+            parcellation_output_path = join(subject_output_path, parcellation)
+
+            if os.path.isdir(parcellation_output_path):
+
+                figure = plt.figure(figsize=(12, 8))
+                axes1 = figure.add_subplot(2, 3, 1)
+                axes2 = figure.add_subplot(2, 3, 2)
+                axes3 = figure.add_subplot(2, 3, 3)
+                axes4 = figure.add_subplot(2, 3, 4)
+                axes5 = figure.add_subplot(2, 3, 5)
+                axes6 = figure.add_subplot(2, 3, 6)
+
+                correlation_matrix_pearson_univariate_lagged = np.loadtxt(join(parcellation_output_path, 'correlation_matrix_pearson_univariate_lagged.txt'), delimiter=',')
+                correlation_matrix_distance_univariate_lagged = np.loadtxt(join(parcellation_output_path, 'correlation_matrix_distance_univariate_lagged.txt'), delimiter=',')
+                correlation_matrix_distance_multivariate_lagged = np.loadtxt(join(parcellation_output_path, 'correlation_matrix_distance_multivariate_lagged.txt'), delimiter=',')
+
+                correlation_matrix_pearson_univariate = np.loadtxt(join(parcellation_output_path, 'correlation_matrix_pearson_univariate.txt'), delimiter=',')
+                correlation_matrix_distance_univariate = np.loadtxt(join(parcellation_output_path, 'correlation_matrix_distance_univariate.txt'), delimiter=',')
+                correlation_matrix_distance_multivariate = np.loadtxt(join(parcellation_output_path, 'correlation_matrix_distance_multivariate.txt'), delimiter=',')
+
+                labels = list(range(correlation_matrix_pearson_univariate_lagged.shape[0]))
+
+                plotting.plot_matrix(correlation_matrix_pearson_univariate_lagged, title='Pearson_U_Lagged', axes=axes1, labels=labels, vmax=1., vmin=0.0, reorder=False)
+                plotting.plot_matrix(correlation_matrix_distance_univariate_lagged, title='Distance_U_Lagged', axes=axes2, labels=labels, vmax=1., vmin=0.0, reorder=False)
+                plotting.plot_matrix(correlation_matrix_distance_multivariate_lagged, title='Distance_M_Lagged', axes=axes3, labels=labels, vmax=1., vmin=0.0, reorder=False)
+                plotting.plot_matrix(correlation_matrix_pearson_univariate, title='Pearson_U', axes=axes4, labels=labels, vmax=1., vmin=0.0, reorder=False)
+                plotting.plot_matrix(correlation_matrix_distance_univariate, title='Distance_U', axes=axes5, labels=labels, vmax=1., vmin=0.0, reorder=False)
+                plotting.plot_matrix(correlation_matrix_distance_multivariate, title='Distance_M', axes=axes6, labels=labels, vmax=1., vmin=0.0, reorder=False)
+                figure.savefig(join(parcellation_output_path, 'plots_not_reorder.png'), dpi=600)
+
+                plotting.plot_matrix(correlation_matrix_pearson_univariate_lagged, title='Pearson_U_Lagged', axes=axes1, labels=labels, vmax=1., vmin=0.0, reorder=True)
+                plotting.plot_matrix(correlation_matrix_distance_univariate_lagged, title='Distance_U_Lagged', axes=axes2, labels=labels, vmax=1., vmin=0.0, reorder=True)
+                plotting.plot_matrix(correlation_matrix_distance_multivariate_lagged, title='Distance_M_Lagged', axes=axes3, labels=labels, vmax=1., vmin=0.0, reorder=True)
+                plotting.plot_matrix(correlation_matrix_pearson_univariate, title='Pearson_U', axes=axes4, labels=labels, vmax=1., vmin=0.0, reorder=True)
+                plotting.plot_matrix(correlation_matrix_distance_univariate, title='Distance_U', axes=axes5, labels=labels, vmax=1., vmin=0.0, reorder=True)
+                plotting.plot_matrix(correlation_matrix_distance_multivariate, title='Distance_M', axes=axes6, labels=labels, vmax=1., vmin=0.0, reorder=True)
+                figure.savefig(join(parcellation_output_path, 'plots_reorder.png'), dpi=600)
+
