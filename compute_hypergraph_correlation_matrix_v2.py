@@ -66,5 +66,5 @@ preproc.connect([(infosource, selectfiles, [('subject_id', 'subject_id')]),
                   [('correlation_matrix_out_file', 'preprocessing.@correlation_matrix_out_file')]),
                  (compute_correlation_matrix, datasink,
                   [('correlation_matrix_plot_out_file', 'preprocessing.@correlation_matrix_plot_out_file')])])
-plugin_args = {'n_procs': 7}
+plugin_args = {'n_procs':2}
 preproc.run(plugin='MultiProc', plugin_args=plugin_args)

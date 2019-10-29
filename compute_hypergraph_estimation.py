@@ -102,9 +102,15 @@ def run(ts_path, output_path, savefigure, faster=False):
     for alpha in alphas:
         alpha = round(alpha, 2)
         print('Computing a HyperGraph with ' + str(alpha) + ' sparse level')
-        hypergraph = compute_hypergraph(time_series=x, alpha=alpha, savefigure=savefigure + str(alpha) + '.png')
+        output_file = join(output_path, '_hypergraph_' + str(alpha) + '.txt')
+        if not path.exists(output_file):
+            hypergraph = compute_hypergraph(time_series=x, alpha=alpha, savefigure=savefigure + str(alpha) + '.png')
+            np.savetxt(output_file, hypergraph, delimiter=',', fmt='%i')
+        else:
+            hypergraph = np.loadtxt(output_file, delimiter=',')
+
         hypergraph_list.append(hypergraph)
-        np.savetxt(join(output_path, '_hypergraph_' + str(alpha) + '.txt'), hypergraph, delimiter=',', fmt='%i')
+
 
     #print(np.asarray(hypergraph_list).shape)
     #median_hypergraph = np.median(np.asarray(hypergraph_list), axis=0)
@@ -186,11 +192,12 @@ for subject in sorted(listdir(preprocessing_path)):
     hypergraphs = run(time_series_path, folder_output, savefigure=join(folder_output, 'hypergraph_'), faster=True)
     hypergraphs_list.append(hypergraphs)
 
-print(np.asarray(hypergraphs_list).shape)
-median_hypergraph = np.median(np.median(np.asarray(hypergraphs_list), axis=1), axis=0)
+np_hypergraph = np.asarray(hypergraphs_list).astype(np.int8)
+print(np_hypergraph.shape)
+median_hypergraph = np.median(np.median(np_hypergraph, axis=1), axis=0)
 
 figure = plt.figure(figsize=(6, 6))
 plotting.plot_matrix(median_hypergraph, figure=figure, reorder=False)
 figure.savefig('_hypergraph_median.png', dpi=200)
-np.savetxt(join('_hypergraph_median.txt'), median_hypergraph, delimiter=',', fmt='%10.1f',)
+np.savetxt(join('_hypergraph_median.txt'), median_hypergraph, delimiter=',', fmt='%i',)
 
