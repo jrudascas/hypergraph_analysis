@@ -33,22 +33,22 @@ subject_list = ['sub-MCS_AI',
                 'sub-MCS_MO',
                 'sub-MCS_MT',
                 'sub-MCS_MU',
-                'sub-MCS_NL']
-                #'sub-MCS_PA',
-                #'sub-MCS_PJ',
-                #'sub-MCS_RB',
-                #'sub-MCS_RP',
-                #'sub-MCS_SC',
-                #'sub-MCS_ST',
-                #'sub-MCS_TP',
-                #'sub-MCS_VW']
+                'sub-MCS_NL',
+                'sub-MCS_PA',
+                'sub-MCS_PJ',
+                'sub-MCS_RB',
+                'sub-MCS_RP',
+                'sub-MCS_SC',
+                'sub-MCS_ST',
+                'sub-MCS_TP',
+                'sub-MCS_VW']
 
 # Infosource-a function free node to iterate over the list of subject names
 infosource = Node(IdentityInterface(fields=['subject_id']), name="infosource")
 infosource.iterables = [('subject_id', subject_list)]
 
 # SelectFiles-to grab the data (alternativ to DataGrabber)
-time_serie_file = opj('{subject_id}', 'parcellation_from_lasso/time_series.txt')
+time_serie_file = opj('{subject_id}', 'time_serie.txt')
 
 templates = {'time_series': time_serie_file}
 selectfiles = Node(SelectFiles(templates, base_directory=preprocessing_path), name="selectfiles")

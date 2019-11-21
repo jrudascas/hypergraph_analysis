@@ -23,13 +23,21 @@ class ComputeCorrelationMatrix(BaseInterface):
         from nilearn import plotting
         import matplotlib.pyplot as plt
         import dcor
+        from datetime import datetime
 
         hypergraph = np.loadtxt(self.inputs.hypergraph_path, delimiter=',')
         time_series = np.loadtxt(self.inputs.time_series_path, delimiter=',')
 
         hypergraph_shape = hypergraph.shape
         correlation_matrix = np.zeros(hypergraph_shape)
+
+        threshold = 0.3
+
+        hypergraph[np.where(hypergraph > threshold)] = 1
+        hypergraph[np.where(hypergraph != 1)] = 0
         hypergraph = hypergraph.astype(bool)
+
+        then = datetime.now()
 
         for i in range(hypergraph_shape[0]):
             print(i)
@@ -44,6 +52,7 @@ class ComputeCorrelationMatrix(BaseInterface):
 
         np.savetxt(self.inputs.correlation_matrix_out_file, correlation_matrix, delimiter=',', fmt='%10.2f')
 
+        print('Total time: ', (datetime.now() - then).total_seconds())
         return runtime
 
     def _list_outputs(self):

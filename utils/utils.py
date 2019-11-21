@@ -1,13 +1,16 @@
 import os
 import numpy as np
 
+
 def makedir(path):
     if not os.path.exists(path):
         os.mkdir(path)
 
+
 def ks_test(A, B):
     import scipy
     return 1 / scipy.stats.ks_2samp(np.ravel(A), np.ravel(B))[0]
+
 
 def compute_functional_connectivity(time_courses, metric='pearson'):
     from dcor import u_distance_correlation_sqr
