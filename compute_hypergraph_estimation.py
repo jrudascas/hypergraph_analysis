@@ -153,7 +153,7 @@ def run(ts_path, output_path, savefigure, faster=False):
     return hypergraph_list
 
 #preprocessing_path = '/home/jrudascas/Desktop/Tesis/data/datasets/test'
-preprocessing_path = '/home/jrudascas/Desktop/Tesis/data/datasets/mcs/output/datasink/preprocessing/'
+preprocessing_path = '/media/jrudascas/HDRUDAS/tesis/controls/output/datasink/preprocessing/'
 nmi_brain_mask_path = '/home/jrudascas/Desktop/Tesis/data/parcellations/MNI152_T1_2mm_brain_mask.nii.gz'
 gm_mask_path = '/home/jrudascas/Desktop/Tesis/data/parcellations/GM_mask_MNI_2mm.nii'
 threshold = 0.6
@@ -211,4 +211,3 @@ plotting.plot_matrix(median_hypergraph, figure=figure, reorder=False, cmap='Grey
 figure.savefig('_hypergraph_median.png', dpi=200)
 plt.close(figure)
 np.savetxt(join('_hypergraph_median.txt'), median_hypergraph, delimiter=',', fmt='%i',)
-

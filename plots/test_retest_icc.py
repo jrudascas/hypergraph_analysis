@@ -7,14 +7,15 @@ from rpy2.robjects import DataFrame, FloatVector, IntVector
 
 r_icc = importr("ICC")
 
-path_session = ['/home/jrudascas/Desktop/Tesis/data/datasets/test-retest/s1/output/datasink/preprocessing',
-                '/home/jrudascas/Desktop/Tesis/data/datasets/test-retest/s2/output/datasink/preprocessing']
+path_session = ['/media/jrudascas/HDRUDAS/tesis/s1/output/datasink/preprocessing',
+                '/media/jrudascas/HDRUDAS/tesis/s2/output/datasink/preprocessing']
 
 path_parcellation = ['_image_parcellation_path_..home..jrudascas..Desktop..Tesis..data..parcellations..AAL2.nii',
                      '_image_parcellation_path_..home..jrudascas..Desktop..Tesis..data..parcellations..rsn_parcellation.._parcellation_2mm.nii',
-                     '_image_parcellation_path_..home..jrudascas..Desktop..Tesis..data..parcellations..rsn_parcellation..raw..Parcels_MNI_222.nii']
+                     '_image_parcellation_path_..home..jrudascas..Desktop..Tesis..data..parcellations..rsn_parcellation..raw..Parcels_MNI_222.nii',
+                     'parcellation_from_lasso']
 
-measures = ['correlation_matrix_base_univariate.txt',
+measures = [#'correlation_matrix_base_univariate.txt',
             'correlation_matrix_distance_multivariate.txt']
             #'correlation_matrix_distance_multivariate_lagged.txt',
             #'correlation_matrix_distance_univariate.txt',

@@ -6,7 +6,7 @@ def makedir(path):
     if not os.path.exists(path):
         os.mkdir(path)
 
-preprocessing_path = '/home/jrudascas/Desktop/Tesis/data/datasets/mcs/output/datasink/preprocessing/'
+preprocessing_path = '/media/jrudascas/HDRUDAS/tesis/s3/output/datasink/preprocessing/'
 time_serie_relative_path = 'parcellation_from_lasso/time_series.txt'
 
 new_folder_path = '/home/jrudascas/Desktop/to_transfer/'
