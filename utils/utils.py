@@ -7,6 +7,12 @@ def makedir(path):
         os.mkdir(path)
 
 
+def absmax(a, axis=None):
+    amax = a.max(axis)
+    amin = a.min(axis)
+    return np.where(-amin > amax, amin, amax)
+
+
 def ks_test(A, B):
     import scipy
     return 1 / scipy.stats.ks_2samp(np.ravel(A), np.ravel(B))[0]

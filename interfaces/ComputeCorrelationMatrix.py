@@ -5,6 +5,7 @@ import os
 class ComputeCorrelationMatrixInputSpec(BaseInterfaceInputSpec):
     hypergraph_path = File(exists=True, mandatory=True)
     time_series_path = File(mandatory=True)
+    lag = traits.Int(default_value=0)
     correlation_matrix_out_file = File(mandatory=True)
     correlation_matrix_plot_out_file = File(mandatory=True)
 
@@ -24,12 +25,14 @@ class ComputeCorrelationMatrix(BaseInterface):
         import matplotlib.pyplot as plt
         import dcor
         from datetime import datetime
+        from utils.utils import absmax
 
         hypergraph = np.loadtxt(self.inputs.hypergraph_path, delimiter=',')
         time_series = np.loadtxt(self.inputs.time_series_path, delimiter=',')
 
-        hypergraph_shape = hypergraph.shape
-        correlation_matrix = np.zeros(hypergraph_shape)
+        k_circular = [0] if self.inputs.lag == 0 else range(-1 * self.inputs.lag, self.inputs.lag + 1, 1)
+
+        correlation_matrix = np.zeros(hypergraph.shape)
 
         threshold = 0.3
 
@@ -39,12 +42,19 @@ class ComputeCorrelationMatrix(BaseInterface):
 
         then = datetime.now()
 
-        for i in range(hypergraph_shape[0]):
+        for i in range(hypergraph.shape[0]):
             print(i)
-            for j in range(i + 1, hypergraph_shape[0], 1):
-                correlation_matrix[i, j] = dcor.u_distance_correlation_sqr(time_series[:, hypergraph[i, :]],
-                                                                           time_series[:, hypergraph[j, :]])
-                #correlation_matrix[j, i] = correlation_matrix[i, j]
+            for j in range(i + 1, hypergraph.shape[0], 1):
+                correlation_values_from_laggeds = []
+                for lag in k_circular:
+                    correlation_values_from_laggeds.append(
+                        dcor.u_distance_correlation_sqr(time_series[:, hypergraph[i, :]],
+                                                        np.roll(time_series[:, hypergraph[j, :]], lag)))
+
+                    # correlation_matrix[i, j] = dcor.u_distance_correlation_sqr(time_series[:, hypergraph[i, :]],
+                    #                                                           time_series[:, hypergraph[j, :]])
+                correlation_matrix[i, j] = np.max(correlation_values_from_laggeds)
+                # correlation_matrix[j, i] = correlation_matrix[i, j]
 
         figure = plt.figure(figsize=(6, 6))
         plotting.plot_matrix(correlation_matrix, figure=figure, vmax=1., vmin=0.)
