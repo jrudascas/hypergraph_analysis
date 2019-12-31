@@ -60,7 +60,7 @@ preproc = Workflow(name='preproc')
 preproc.base_dir = opj(experiment_dir, working_dir)
 
 compute_correlation_matrix = Node(
-    c.ComputeCorrelationMatrix(hypergraph_path=hypergraph_path, correlation_matrix_out_file=correlation_matrix_out_file,
+    c.ComputeCorrelationMatrix(lag = 3, hypergraph_path=hypergraph_path, correlation_matrix_out_file=correlation_matrix_out_file,
                              correlation_matrix_plot_out_file=correlation_matrix_plot_out_file),
     name='compute_correlation_matrix')
 
