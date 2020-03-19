@@ -2,11 +2,11 @@ import os
 from os.path import join
 import matplotlib.pyplot as plt
 import numpy as np
-from rpy2.robjects.packages import importr
+#from rpy2.robjects.packages import importr
 from scipy.stats import pearsonr
-from rpy2.robjects import DataFrame, FloatVector, IntVector
+#from rpy2.robjects import DataFrame, FloatVector, IntVector
 import pandas as pd
-r_icc = importr("ICC")
+#r_icc = importr("ICC")
 
 group_1 = 's1'
 group_2 = 's2'
@@ -42,6 +42,7 @@ measure_data_list = []
 pos = np.arange(1, 3*len(path_parcellation), 3)
 icc_session_list = []
 
+
 for measure in measures:
     measure_name = measure.split('correlation_matrix_')[1].split('.txt')[0]
     print(measure_name)
@@ -55,11 +56,14 @@ for measure in measures:
                 for id2_session in range(id_session + 1, len(path_session), 1):
 
                     try:
+                        iu1 = np.triu_indices(np.loadtxt(join(path_session[id_session], subject, parcellation, measure),
+                                                         delimiter=',').shape[0], k=1)
+
                         connectivity_matrix_1_flatted = np.loadtxt(join(path_session[id_session], subject, parcellation, measure),
-                                                         delimiter=',').flatten()
+                                                         delimiter=',')[iu1].flatten()
 
                         connectivity_matrix_2_flatted  = np.loadtxt(join(path_session[id2_session], subject, parcellation, measure),
-                                                         delimiter=',').flatten()
+                                                         delimiter=',')[iu1].flatten()
 
                         similarity_value = pearsonr(connectivity_matrix_1_flatted , connectivity_matrix_2_flatted )
 
