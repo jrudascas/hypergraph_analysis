@@ -2,11 +2,9 @@ import os
 from os.path import join
 import matplotlib.pyplot as plt
 import numpy as np
-#from rpy2.robjects.packages import importr
 from scipy.stats import pearsonr
-#from rpy2.robjects import DataFrame, FloatVector, IntVector
 import pandas as pd
-#r_icc = importr("ICC")
+import plotly.express as px
 
 group_1 = 's1'
 group_2 = 's2'
@@ -21,7 +19,6 @@ path_parcellation = ['_image_parcellation_path_..home..jrudascas..Desktop..Tesis
                      '_image_parcellation_path_..home..jrudascas..Desktop..Tesis..data..parcellations..rsn_parcellation..raw..Parcels_MNI_222.nii',
                      'parcellation_from_lasso']
 
-#parcellation_labels = ['AAL2', 'RSN', 'Func']
 parcellation_labels = ['AAL2', 'RSN', 'Func', 'Hyper']
 
 measures = [
@@ -67,32 +64,12 @@ for measure in measures:
 
                         similarity_value = pearsonr(connectivity_matrix_1_flatted , connectivity_matrix_2_flatted )
 
-                        #df = DataFrame({"groups": FloatVector(connectivity_matrix_1_flatted), "values": FloatVector(connectivity_matrix_2_flatted)})
-                        #similarity_value = r_icc.ICCbare("groups", "values", data=df)
-
                         icc_list.append(similarity_value[0])
                     except Exception as e:
                         pass
-            #icc_session_list.append(icc_list)
             if len(icc_list) > 0:
                 icc_session_list.append({'measure':measure_name, 'parcellation': parcellation_name, 'subject': subject, 'similarity': np.mean(icc_list)})
 
-        #m = np.asarray(icc_session_list)
-        #icc_parcellation_list.append(np.mean(m, axis=0))
-    #measure_data_list.append(icc_parcellation_list)
-
-    #figure, axes = plt.subplots(nrows=1, ncols=1, figsize=(10, 8))
-    #axes.violinplot(icc_parcellation_list, positions=pos, showmeans=True, showmedians=True)
-    #axes.set_xticks(pos)
-    #axes.set_ylim(0.4, 1)
-    #axes.set_xticklabels(parcellation_labels)
-    #measure_name = measure.split('correlation_matrix_')[1].split('.txt')[0]
-    #axes.set_title(measure_name)
-    #figure.savefig(measure_name + '_icc.png', dpi=200)
-    #plt.close(figure)
 df = pd.DataFrame.from_dict(icc_session_list)
-
-import plotly.express as px
-
-fig = px.violin(df, y="similarity", x="measure", color="parcellation", box=True, points="all", hover_data=df.columns)
+fig = px.violin(df, y="similarity", x="measure", color="parcellation", box=True, points="all", hover_data=df.columns, title='Intra subject similarity - Test-retest dataset')
 fig.show()
